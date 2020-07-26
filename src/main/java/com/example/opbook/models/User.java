@@ -1,6 +1,7 @@
 package com.example.opbook.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="User")
@@ -14,6 +15,18 @@ public class User {
     private String email;
 
     private String password;
+
+    @ManyToMany
+    @JoinTable(name="UserCourses",
+            joinColumns=@JoinColumn(name="UserID"),
+            inverseJoinColumns=@JoinColumn(name="CourseID"))
+    private Set<Course> attendedCourses;
+
+    @ManyToMany
+    @JoinTable(name="PostLikes",
+            joinColumns=@JoinColumn(name="UserID"),
+            inverseJoinColumns=@JoinColumn(name="PostID"))
+    private Set<Post> likedPosts;
 
     public Integer getId() {
         return id;

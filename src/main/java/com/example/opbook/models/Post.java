@@ -3,6 +3,7 @@ package com.example.opbook.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Post {
@@ -23,6 +24,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name="CourseID", nullable=false)
     private Course course;
+
+    @ManyToMany(mappedBy="likedPosts")
+    private Set<User> studentsWhoLiked;
 
     public Integer getId() {
         return id;

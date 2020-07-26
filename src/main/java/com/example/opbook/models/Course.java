@@ -2,6 +2,7 @@ package com.example.opbook.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name="Course")
@@ -17,6 +18,9 @@ public class Course {
     private Date creationTime;
 
     private String image;
+
+    @ManyToMany(mappedBy="attendedCourses")
+    private Set<User> students;
 
     public Integer getId() {
         return id;
