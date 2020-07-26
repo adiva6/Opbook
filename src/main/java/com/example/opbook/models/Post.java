@@ -1,8 +1,54 @@
 package com.example.opbook.models;
 
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Post {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name="SubmitterID", nullable=false)
+    private User submitter;
+
+    private Date creationTime;
+
+    private String title;
+
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name="CourseID", nullable=false)
+    private Course course;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getSubmitter() { return submitter; }
+
+    public void setSubmitter(User submitter) { this.submitter = submitter; }
+
+    public Date getCreationTime() { return creationTime; }
+
+    public void setCreationTime(Date creationTime) { this.creationTime = creationTime; }
+
+    public String getTitle() { return title; }
+
+    public void setTitle(String title) { this.title = title; }
+
+    public String getContent() { return content; }
+
+    public void setContent(String content) { this.content = content;}
+
+    public Course getCourse() { return course; }
+
+    public void setCourse(Course course) { this.course = course;}
 }
