@@ -1,7 +1,6 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name="CourseRating")

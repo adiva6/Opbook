@@ -1,4 +1,4 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 
 import javax.persistence.*;
@@ -15,6 +15,7 @@ public class Post {
     @JoinColumn(name="SubmitterID", nullable=false)
     private User submitter;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
 
     private String title;

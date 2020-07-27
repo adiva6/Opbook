@@ -1,4 +1,4 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,6 +18,7 @@ public class LectureComments {
     @JoinColumn(name="LectureID", nullable=false)
     private Lecture lecture;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date referenceTime;
 
     private String content;

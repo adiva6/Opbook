@@ -1,4 +1,4 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +15,7 @@ public class Course {
 
     private String courseSymbol;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
 
     private String image;

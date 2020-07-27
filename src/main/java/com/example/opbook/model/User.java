@@ -1,4 +1,4 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +15,8 @@ public class User {
     private String email;
 
     private String password;
+
+    private Boolean isAdmin;
 
     @ManyToMany
     @JoinTable(name="UserCourses",
@@ -59,4 +61,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Boolean getIsAdmin() { return isAdmin; }
+
+    public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
 }

@@ -1,4 +1,4 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 import javax.persistence.*;
 

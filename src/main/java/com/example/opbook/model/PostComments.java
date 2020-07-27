@@ -1,4 +1,4 @@
-package com.example.opbook.models;
+package com.example.opbook.model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,6 +18,7 @@ public class PostComments {
     @JoinColumn(name="PostID", nullable=false)
     private Post post;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
 
     private String content;
