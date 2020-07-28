@@ -65,4 +65,12 @@ public class User {
     public Boolean getIsAdmin() { return isAdmin; }
 
     public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    public String[] getRoles() {
+        if (getIsAdmin()) {
+            return new String[]{ "Admin" };
+        }
+
+        return new String[]{};
+    }
 }
