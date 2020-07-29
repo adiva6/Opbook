@@ -1,6 +1,7 @@
 package com.example.opbook.config;
 
 
+import com.example.opbook.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -49,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // Don't authenticate this particular request
-        httpSecurity.authorizeRequests().antMatchers("/authenticate").permitAll().
+        httpSecurity.csrf().disable().authorizeRequests().antMatchers("/authenticate").permitAll().
         // All other requests need to be authenticated
         anyRequest().authenticated().and().
         // Make sure we use stateless session; session won't be used to store user's state.

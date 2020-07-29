@@ -66,11 +66,4 @@ public class User {
 
     public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
 
-    public String[] getRoles() {
-        if (getIsAdmin()) {
-            return new String[]{ "Admin" };
-        }
-
-        return new String[]{};
-    }
 }
