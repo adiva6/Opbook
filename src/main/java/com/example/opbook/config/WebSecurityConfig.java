@@ -1,7 +1,6 @@
 package com.example.opbook.config;
 
 
-import com.example.opbook.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -50,14 +48,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // Don't authenticate these particular requests
-        httpSecurity.csrf().disable().authorizeRequests().
+        httpSecurity.authorizeRequests().
         antMatchers("/authenticate").permitAll().
         antMatchers("/sign-up").permitAll().
         // All other requests need to be authenticated
-        anyRequest().authenticated().and().
+        anyRequest().authenticated().and().cors().and().
         // Make sure we use stateless session; session won't be used to store user's state.
         exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+        and().csrf().disable();
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
