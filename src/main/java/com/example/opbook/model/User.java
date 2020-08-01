@@ -1,6 +1,8 @@
 package com.example.opbook.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
@@ -8,14 +10,23 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
+    @Column(name = "Name")
+    @NotEmpty(message = "Please provide a name")
     private String name;
 
+    @Column(name = "Email")
+    @Email(message = "Please provide a valid e-mail")
+    @NotEmpty(message = "Please provide an e-mail")
     private String email;
 
+    @Column(name = "Password")
+    @NotEmpty(message = "Please provide a password")
     private String password;
 
+    @Column(name = "IsAdmin")
     private Boolean isAdmin;
 
     @ManyToMany

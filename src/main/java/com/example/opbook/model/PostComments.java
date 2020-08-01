@@ -1,6 +1,7 @@
 package com.example.opbook.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -8,6 +9,7 @@ import java.util.Date;
 public class PostComments {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
     @ManyToOne
@@ -18,9 +20,12 @@ public class PostComments {
     @JoinColumn(name="PostID", nullable=false)
     private Post post;
 
+    @Column(name = "CreationTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
 
+    @Column(name = "Content")
+    @NotEmpty(message = "Please provide the comment content")
     private String content;
 
     public Integer getId() { return id; }

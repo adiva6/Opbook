@@ -1,22 +1,30 @@
 package com.example.opbook.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="CourseRating")
 public class CourseRating {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
     @ManyToOne
     @JoinColumn(name="UserID", nullable=false)
     private User user;
 
+    @Column(name = "Interest")
+    @NotEmpty(message = "Please provide the interest score")
     private Integer interest;
 
+    @Column(name = "Instruction")
+    @NotEmpty(message = "Please provide the instruction score")
     private Integer instruction;
 
+    @Column(name = "Relevance")
+    @NotEmpty(message = "Please provide the relevance score")
     private Integer relevance;
 
     @ManyToOne

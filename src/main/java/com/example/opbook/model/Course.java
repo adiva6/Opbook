@@ -1,6 +1,7 @@
 package com.example.opbook.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.Set;
 
@@ -9,15 +10,22 @@ import java.util.Set;
 public class Course {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
+    @Column(name = "Name")
+    @NotEmpty(message = "Please provide a name")
     private String name;
 
+    @Column(name = "CourseSymbol")
+    @NotEmpty(message = "Please provide a course symbol")
     private String courseSymbol;
 
+    @Column(name = "CreationTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
 
+    @Column(name = "Image")
     private String image;
 
     @ManyToMany(mappedBy="attendedCourses")

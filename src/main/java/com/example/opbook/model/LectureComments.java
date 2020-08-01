@@ -1,6 +1,7 @@
 package com.example.opbook.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -8,6 +9,7 @@ import java.util.Date;
 public class LectureComments {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
 
     @ManyToOne
@@ -18,9 +20,12 @@ public class LectureComments {
     @JoinColumn(name="LectureID", nullable=false)
     private Lecture lecture;
 
+    @Column(name = "ReferenceTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date referenceTime;
 
+    @Column(name = "Content")
+    @NotEmpty(message = "Please provide the comment content")
     private String content;
 
     public Integer getId() { return id; }
