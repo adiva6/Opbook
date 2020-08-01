@@ -1,6 +1,7 @@
 package com.example.opbook.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -25,8 +26,8 @@ public class User {
     private String email;
 
     @Column(name = "Password")
-    @JsonIgnore
     @NotEmpty(message = "{validation.password.notEmpty}")
+    @JsonIgnore
     private String password;
 
     @Column(name = "IsAdmin")
@@ -68,10 +69,12 @@ public class User {
         this.email = email;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
