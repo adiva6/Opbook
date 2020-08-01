@@ -13,11 +13,11 @@ public class Course {
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "Name")
+    @Column(name = "Name", unique = true)
     @NotEmpty(message = "Please provide a name")
     private String name;
 
-    @Column(name = "CourseSymbol")
+    @Column(name = "CourseSymbol", unique = true)
     @NotEmpty(message = "Please provide a course symbol")
     private String courseSymbol;
 
