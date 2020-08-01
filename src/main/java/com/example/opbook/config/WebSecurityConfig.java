@@ -49,8 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // Don't authenticate this particular request
-        httpSecurity.csrf().disable().authorizeRequests().antMatchers("/authenticate").permitAll().
+        // Don't authenticate these particular requests
+        httpSecurity.csrf().disable().authorizeRequests().
+        antMatchers("/authenticate").permitAll().
+        antMatchers("/sign-up").permitAll().
         // All other requests need to be authenticated
         anyRequest().authenticated().and().
         // Make sure we use stateless session; session won't be used to store user's state.

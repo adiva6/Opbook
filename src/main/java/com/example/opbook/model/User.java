@@ -1,5 +1,7 @@
 package com.example.opbook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -14,16 +16,17 @@ public class User {
     private Integer id;
 
     @Column(name = "Name")
-    @NotEmpty(message = "Please provide a name")
+    @NotEmpty(message = "{validation.name.notEmpty}")
     private String name;
 
     @Column(name = "Email")
-    @Email(message = "Please provide a valid e-mail")
-    @NotEmpty(message = "Please provide an e-mail")
+    @Email(message = "{validation.email.valid")
+    @NotEmpty(message = "{validation.email.notEmpty}")
     private String email;
 
     @Column(name = "Password")
-    @NotEmpty(message = "Please provide a password")
+    @JsonIgnore
+    @NotEmpty(message = "{validation.password.notEmpty}")
     private String password;
 
     @Column(name = "IsAdmin")

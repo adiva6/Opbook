@@ -6,13 +6,17 @@ import com.example.opbook.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 
 @RestController
-public class UserController {
+public class UserController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
@@ -23,8 +27,8 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PostMapping(value = "/students")
-    public User register(@Valid User user) {
+    @PostMapping(value = "/sign-up")
+    public ResponseEntity<User> register(@Valid @RequestBody User user) {
         // Lookup user in database by e-mail
         User userExists = userService.findByEmail(user.getEmail());
 
@@ -34,6 +38,6 @@ public class UserController {
         }
 
         userService.save(user);
-        return user;
+        return ResponseEntity.ok(user);
     }
 }
