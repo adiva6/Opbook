@@ -70,10 +70,4 @@ public class UserController extends BaseController {
     public String handleValidationExceptions(EmailTakenException ex) {
         return ex.getMessage();
     }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserNotFoundException.class)
-    public String handleNotFoundExceptions(UserNotFoundException ex) {
-        return ex.getMessage();
-    }
 }

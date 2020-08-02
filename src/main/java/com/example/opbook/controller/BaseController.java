@@ -1,5 +1,7 @@
 package com.example.opbook.controller;
 
+import com.example.opbook.exceptions.CourseNotFoundException;
+import com.example.opbook.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,5 +22,11 @@ public class BaseController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFoundExceptions(NotFoundException ex) {
+        return ex.getMessage();
     }
 }

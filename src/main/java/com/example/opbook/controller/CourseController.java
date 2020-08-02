@@ -38,12 +38,4 @@ public class CourseController extends BaseController {
 
         return ResponseEntity.ok(course.get().getPosts());
     }
-
-    // Exception Handlers //
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(CourseNotFoundException.class)
-    public String handleNotFoundExceptions(CourseNotFoundException ex) {
-        return ex.getMessage();
-    }
 }
