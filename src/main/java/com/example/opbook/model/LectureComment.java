@@ -5,8 +5,8 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
-@Table(name="LectureComments")
-public class LectureComments {
+@Table(name="LectureComment")
+public class LectureComment {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID")

@@ -1,6 +1,8 @@
 package com.example.opbook.controller;
 
 import com.example.opbook.exceptions.EmailTakenException;
+import com.example.opbook.exceptions.UserNotFoundException;
+import com.example.opbook.model.Course;
 import com.example.opbook.model.User;
 import com.example.opbook.service.UserService;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 
 @RestController
@@ -31,6 +34,18 @@ public class UserController extends BaseController {
         return ResponseEntity.ok(userService.findByEmail(principal.getName()));
     }
 
+    @GetMapping(value = "/users/{userId}/courses")
+    public ResponseEntity<Iterable<Course>> getUserCourses(@PathVariable(value = "userId") long userId) {
+        Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()) {
+            String errorMessage = String.format("User #%d wasn't found!", userId);
+            logger.error(errorMessage);
+            throw new UserNotFoundException(errorMessage);
+        }
+
+        return ResponseEntity.ok(user.get().getAttendedCourses());
+    }
+
     @PostMapping(value = "/sign-up")
     public ResponseEntity<User> register(@Valid @RequestBody User user) {
         // Lookup user in database by e-mail
@@ -43,12 +58,22 @@ public class UserController extends BaseController {
         }
 
         userService.save(user);
+        logger.info(String.format("User [%s] was successfully registered", user.getEmail()));
+
         return ResponseEntity.ok(user);
     }
+
+    // Exception Handlers //
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmailTakenException.class)
     public String handleValidationExceptions(EmailTakenException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleNotFoundExceptions(UserNotFoundException ex) {
         return ex.getMessage();
     }
 }

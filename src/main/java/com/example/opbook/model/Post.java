@@ -30,11 +30,14 @@ public class Post {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="CourseID", nullable=false)
+    @JoinColumn(name = "CourseID", nullable=false)
     private Course course;
 
-    @ManyToMany(mappedBy="likedPosts")
+    @ManyToMany(mappedBy = "likedPosts")
     private Set<User> studentsWhoLiked;
+
+    @OneToMany(mappedBy = "post")
+    private Set<PostComment> comments;
 
     public Integer getId() {
         return id;
@@ -63,4 +66,6 @@ public class Post {
     public Course getCourse() { return course; }
 
     public void setCourse(Course course) { this.course = course;}
+
+    public Set<PostComment> getComments() { return comments; }
 }

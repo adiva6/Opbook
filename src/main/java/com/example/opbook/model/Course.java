@@ -11,7 +11,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "Name", unique = true)
     @NotEmpty(message = "Please provide a name")
@@ -28,14 +28,17 @@ public class Course {
     @Column(name = "Image")
     private String image;
 
-    @ManyToMany(mappedBy="attendedCourses")
+    @ManyToMany(mappedBy = "attendedCourses")
     private Set<User> students;
 
-    public Integer getId() {
+    @OneToMany(mappedBy = "course")
+    private Set<Post> posts;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,5 +61,7 @@ public class Course {
     public String getImage() { return image; }
 
     public void setImage(String image) { this.image = image; }
+
+    public Set<Post> getPosts() { return posts; }
 
 }

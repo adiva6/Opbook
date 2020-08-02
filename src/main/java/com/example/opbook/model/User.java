@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "Name")
     @NotEmpty(message = "{validation.name.notEmpty}")
@@ -34,22 +34,22 @@ public class User {
     private Boolean isAdmin;
 
     @ManyToMany
-    @JoinTable(name="UserCourses",
+    @JoinTable(name="UserCourse",
             joinColumns=@JoinColumn(name="UserID"),
             inverseJoinColumns=@JoinColumn(name="CourseID"))
     private Set<Course> attendedCourses;
 
     @ManyToMany
-    @JoinTable(name="PostLikes",
+    @JoinTable(name="PostLike",
             joinColumns=@JoinColumn(name="UserID"),
             inverseJoinColumns=@JoinColumn(name="PostID"))
     private Set<Post> likedPosts;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -82,5 +82,7 @@ public class User {
     public Boolean getIsAdmin() { return isAdmin; }
 
     public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    public Set<Course> getAttendedCourses() { return attendedCourses; }
 
 }

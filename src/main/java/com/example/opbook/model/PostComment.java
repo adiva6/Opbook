@@ -5,10 +5,10 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
-@Table(name="PostComments")
-public class PostComments {
+@Table(name="PostComment")
+public class PostComment {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Integer id;
 
