@@ -25,18 +25,17 @@ public class CourseController extends BaseController {
 
     @GetMapping(value = "/courses/{courseSymbol}")
     public ResponseEntity<Course> getCourse(@PathVariable(value = "courseSymbol") String courseSymbol) {
-        Course course = courseService.findByCourseSymbol(courseSymbol);
-        if (course == null) {
-            String errorMessage = String.format("Course (%s) wasn't found!", courseSymbol);
-            logger.error(errorMessage);
-            throw new CourseNotFoundException(errorMessage);
-        }
-
+        Course course = findCourseBySymbol(courseSymbol);
         return ResponseEntity.ok(course);
     }
 
     @GetMapping(value = "/courses/{courseSymbol}/posts")
     public ResponseEntity<Iterable<Post>> getCoursePosts(@PathVariable(value = "courseSymbol") String courseSymbol) {
+        Course course = findCourseBySymbol(courseSymbol);
+        return ResponseEntity.ok(course.getPosts());
+    }
+
+    private Course findCourseBySymbol(String courseSymbol) {
         Course course = courseService.findByCourseSymbol(courseSymbol);
         if (course == null) {
             String errorMessage = String.format("Course (%s) wasn't found!", courseSymbol);
@@ -44,6 +43,6 @@ public class CourseController extends BaseController {
             throw new CourseNotFoundException(errorMessage);
         }
 
-        return ResponseEntity.ok(course.getPosts());
+        return course;
     }
 }
