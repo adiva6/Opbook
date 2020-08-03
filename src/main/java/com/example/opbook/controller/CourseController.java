@@ -3,7 +3,6 @@ package com.example.opbook.controller;
 import com.example.opbook.exceptions.CourseNotFoundException;
 import com.example.opbook.model.Course;
 import com.example.opbook.model.Post;
-import com.example.opbook.repository.CourseRepository;
 import com.example.opbook.service.CourseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +21,18 @@ public class CourseController extends BaseController {
     @GetMapping(value = "/courses")
     public Iterable<Course> getAllCourses() {
         return courseService.findAll();
+    }
+
+    @GetMapping(value = "/courses/{courseSymbol}")
+    public ResponseEntity<Course> getCourse(@PathVariable(value = "courseSymbol") String courseSymbol) {
+        Course course = courseService.findByCourseSymbol(courseSymbol);
+        if (course == null) {
+            String errorMessage = String.format("Course (%s) wasn't found!", courseSymbol);
+            logger.error(errorMessage);
+            throw new CourseNotFoundException(errorMessage);
+        }
+
+        return ResponseEntity.ok(course);
     }
 
     @GetMapping(value = "/courses/{courseSymbol}/posts")
