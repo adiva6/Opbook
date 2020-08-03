@@ -23,4 +23,8 @@ public class CourseService {
     public Optional<Course> findById(long id) {
         return courseRepository.findById(id);
     }
+
+    public Course findByCourseSymbol(String courseSymbol) {
+        return courseRepository.findByCourseSymbol(courseSymbol);
+    }
 }
