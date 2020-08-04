@@ -1,5 +1,7 @@
 package com.example.opbook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -12,10 +14,12 @@ public class LectureComment {
     @Column(name = "ID")
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="UserID", nullable=false)
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="LectureID", nullable=false)
     private Lecture lecture;

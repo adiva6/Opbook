@@ -1,5 +1,7 @@
 package com.example.opbook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -28,9 +30,11 @@ public class Course {
     @Column(name = "Image")
     private String image;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "attendedCourses")
     private Set<User> students;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "course")
     private Set<Post> posts;
 

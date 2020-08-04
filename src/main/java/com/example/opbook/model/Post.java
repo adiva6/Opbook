@@ -1,6 +1,8 @@
 package com.example.opbook.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -29,6 +31,7 @@ public class Post {
     @NotEmpty(message = "Please provide the post content")
     private String content;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "CourseID", nullable = false)
     private Course course;

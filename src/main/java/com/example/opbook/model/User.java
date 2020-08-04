@@ -33,12 +33,14 @@ public class User {
     @Column(name = "IsAdmin")
     private Boolean isAdmin;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name="UserCourse",
             joinColumns=@JoinColumn(name="UserID"),
             inverseJoinColumns=@JoinColumn(name="CourseID"))
     private Set<Course> attendedCourses;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name="PostLike",
             joinColumns=@JoinColumn(name="UserID"),

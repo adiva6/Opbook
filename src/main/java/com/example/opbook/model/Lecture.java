@@ -1,5 +1,7 @@
 package com.example.opbook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
@@ -23,6 +25,7 @@ public class Lecture {
     @NotEmpty(message = "Please provide the lecture order")
     private Integer order;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="CourseID", nullable=false)
     private Course course;

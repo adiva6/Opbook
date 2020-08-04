@@ -1,5 +1,7 @@
 package com.example.opbook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
@@ -11,6 +13,7 @@ public class CourseRating {
     @Column(name = "ID")
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="UserID", nullable=false)
     private User user;
@@ -27,6 +30,7 @@ public class CourseRating {
     @NotEmpty(message = "Please provide the relevance score")
     private Integer relevance;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="CourseID", nullable=false)
     private Course course;
