@@ -24,11 +24,11 @@ public class Post {
     private Date creationTime;
 
     @Column(name = "Title")
-    @NotEmpty(message = "Please provide the post title")
+    @NotEmpty(message = "{validation.title.notEmpty}")
     private String title;
 
     @Column(name = "Content")
-    @NotEmpty(message = "Please provide the post content")
+    @NotEmpty(message = "{validation.content.notEmpty}")
     private String content;
 
     @JsonIgnore

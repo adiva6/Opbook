@@ -7,21 +7,21 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
-@Table(name="LectureComment")
+@Table(name = "LectureComment")
 public class LectureComment {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Integer id;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="UserID", nullable=false)
+    @JoinColumn(name = "UserID", nullable = false)
     private User user;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="LectureID", nullable=false)
+    @JoinColumn(name = "LectureID", nullable = false)
     private Lecture lecture;
 
     @Column(name = "ReferenceTime")
@@ -29,27 +29,47 @@ public class LectureComment {
     private Date referenceTime;
 
     @Column(name = "Content")
-    @NotEmpty(message = "Please provide the comment content")
+    @NotEmpty(message = "{validation.content.notEmpty}")
     private String content;
 
-    public Integer getId() { return id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public User getUser() { return user; }
+    public User getUser() {
+        return user;
+    }
 
-    public void setUser(User user) { this.user = user; }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public Lecture getLecture() { return lecture; }
+    public Lecture getLecture() {
+        return lecture;
+    }
 
-    public void setLecture(Lecture lecture) { this.lecture = lecture; }
+    public void setLecture(Lecture lecture) {
+        this.lecture = lecture;
+    }
 
-    public Date getReferenceTime() { return referenceTime; }
+    public Date getReferenceTime() {
+        return referenceTime;
+    }
 
-    public void setReferenceTime(Date referenceTime) { this.referenceTime = referenceTime; }
+    public void setReferenceTime(Date referenceTime) {
+        this.referenceTime = referenceTime;
+    }
 
-    public String getContent() { return content; }
+    public String getContent() {
+        return content;
+    }
 
-    public void setContent(String content) { this.content = content; }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
 }

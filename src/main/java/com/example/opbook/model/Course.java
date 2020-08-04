@@ -8,19 +8,19 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name="Course")
+@Table(name = "Course")
 public class Course {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "Name", unique = true)
-    @NotEmpty(message = "Please provide a name")
+    @NotEmpty(message = "{validation.name.notEmpty}")
     private String name;
 
     @Column(name = "CourseSymbol", unique = true)
-    @NotEmpty(message = "Please provide a course symbol")
+    @NotEmpty(message = "{validation.courseSymbol.notEmpty}")
     private String courseSymbol;
 
     @Column(name = "CreationTime")
@@ -54,18 +54,32 @@ public class Course {
         this.name = name;
     }
 
-    public String getCourseSymbol() { return courseSymbol; }
+    public String getCourseSymbol() {
+        return courseSymbol;
+    }
 
-    public void setCourseSymbol(String courseSymbol) { this.courseSymbol = courseSymbol; }
+    public void setCourseSymbol(String courseSymbol) {
+        this.courseSymbol = courseSymbol;
+    }
 
-    public Date getCreationTime() { return creationTime; }
+    public Date getCreationTime() {
+        return creationTime;
+    }
 
-    public void setCreationTime(Date creationTime) { this.creationTime = creationTime; }
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
+    }
 
-    public String getImage() { return image; }
+    public String getImage() {
+        return image;
+    }
 
-    public void setImage(String image) { this.image = image; }
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-    public Set<Post> getPosts() { return posts; }
+    public Set<Post> getPosts() {
+        return posts;
+    }
 
 }

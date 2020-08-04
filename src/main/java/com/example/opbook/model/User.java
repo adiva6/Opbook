@@ -9,10 +9,10 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
-@Table(name="User")
+@Table(name = "User")
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
@@ -35,16 +35,16 @@ public class User {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name="UserCourse",
-            joinColumns=@JoinColumn(name="UserID"),
-            inverseJoinColumns=@JoinColumn(name="CourseID"))
+    @JoinTable(name = "UserCourse",
+            joinColumns = @JoinColumn(name = "UserID"),
+            inverseJoinColumns = @JoinColumn(name = "CourseID"))
     private Set<Course> attendedCourses;
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name="PostLike",
-            joinColumns=@JoinColumn(name="UserID"),
-            inverseJoinColumns=@JoinColumn(name="PostID"))
+    @JoinTable(name = "PostLike",
+            joinColumns = @JoinColumn(name = "UserID"),
+            inverseJoinColumns = @JoinColumn(name = "PostID"))
     private Set<Post> likedPosts;
 
     public Long getId() {
@@ -81,10 +81,16 @@ public class User {
         this.password = password;
     }
 
-    public Boolean getIsAdmin() { return isAdmin; }
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
 
-    public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
-    public Set<Course> getAttendedCourses() { return attendedCourses; }
+    public Set<Course> getAttendedCourses() {
+        return attendedCourses;
+    }
 
 }
