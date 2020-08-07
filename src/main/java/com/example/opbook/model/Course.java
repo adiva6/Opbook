@@ -30,7 +30,6 @@ public class Course {
     @Column(name = "Image")
     private String image;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "attendedCourses")
     private Set<User> students;
 
@@ -81,5 +80,7 @@ public class Course {
     public Set<Post> getPosts() {
         return posts;
     }
+
+    public Set<User> getStudents() { return students; }
 
 }
