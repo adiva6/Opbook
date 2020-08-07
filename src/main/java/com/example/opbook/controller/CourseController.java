@@ -3,12 +3,19 @@ package com.example.opbook.controller;
 import com.example.opbook.exceptions.CourseNotFoundException;
 import com.example.opbook.model.Course;
 import com.example.opbook.model.Post;
+import com.example.opbook.model.PostComment;
+import com.example.opbook.model.User;
 import com.example.opbook.service.CourseService;
+import com.example.opbook.service.PostService;
+import com.example.opbook.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.security.Principal;
 
 
 @RestController
@@ -17,6 +24,12 @@ public class CourseController extends BaseController {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/courses")
     public Iterable<Course> getAllCourses() {
@@ -27,6 +40,21 @@ public class CourseController extends BaseController {
     public ResponseEntity<Course> getCourse(@PathVariable(value = "courseSymbol") String courseSymbol) {
         Course course = findCourseBySymbol(courseSymbol);
         return ResponseEntity.ok(course);
+    }
+
+    @PostMapping(value = "/courses/{courseSymbol}/posts")
+    public ResponseEntity<Post> submitPost(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                           @Valid @RequestBody Post post,
+                                           Principal principal) {
+        Course course = findCourseBySymbol(courseSymbol);
+        User submitter = userService.findByEmail(principal.getName());
+
+        post.setSubmitter(submitter);
+        post.setCourse(course);
+
+        this.postService.save(post);
+        logger.info("Post was successfully submitted");
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping(value = "/courses/{courseSymbol}/posts")

@@ -1,15 +1,29 @@
 package com.example.opbook.model;
 
 
+import com.example.opbook.serde.PostJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.Set;
 
+@JsonDeserialize(using = PostJsonDeserializer.class)
 @Entity
+@Table(name = "Post")
 public class Post {
+    public Post() {
+
+    }
+
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.creationTime = new Date();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
