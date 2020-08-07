@@ -63,11 +63,4 @@ public class UserController extends BaseController {
         return ResponseEntity.ok(user);
     }
 
-    // Exception Handlers //
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(EmailTakenException.class)
-    public String handleValidationExceptions(EmailTakenException ex) {
-        return ex.getMessage();
-    }
 }

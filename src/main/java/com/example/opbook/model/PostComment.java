@@ -16,10 +16,8 @@ public class PostComment {
 
     }
 
-    public PostComment(User submitter, Post post, String content) {
-        this.user = submitter;
+    public PostComment(String content) {
         this.content = content;
-        this.post = post;
         this.creationTime = new Date();
     }
 

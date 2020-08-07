@@ -1,5 +1,6 @@
 package com.example.opbook.controller;
 
+import com.example.opbook.exceptions.ConflictException;
 import com.example.opbook.exceptions.CourseNotFoundException;
 import com.example.opbook.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,12 @@ public class BaseController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundExceptions(NotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ConflictException.class)
+    public String handleConflictExceptions(ConflictException ex) {
         return ex.getMessage();
     }
 }
