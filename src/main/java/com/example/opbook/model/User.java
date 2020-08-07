@@ -40,8 +40,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "CourseID"))
     private Set<Course> attendedCourses;
 
-    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(targetEntity = Post.class)
     @JoinTable(name = "PostLike",
             joinColumns = @JoinColumn(name = "UserID"),
             inverseJoinColumns = @JoinColumn(name = "PostID"))

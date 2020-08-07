@@ -1,20 +1,33 @@
 package com.example.opbook.model;
 
+import com.example.opbook.serde.PostCommentJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
+@JsonDeserialize(using = PostCommentJsonDeserializer.class)
 @Entity
 @Table(name = "PostComment")
 public class PostComment {
+    public PostComment() {
+
+    }
+
+    public PostComment(User submitter, Post post, String content) {
+        this.user = submitter;
+        this.content = content;
+        this.post = post;
+        this.creationTime = new Date();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Integer id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
@@ -71,4 +84,5 @@ public class PostComment {
     public void setContent(String content) {
         this.content = content;
     }
+
 }

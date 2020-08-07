@@ -36,7 +36,7 @@ public class Post {
     @JoinColumn(name = "CourseID", nullable = false)
     private Course course;
 
-    @ManyToMany(mappedBy = "likedPosts")
+    @ManyToMany(targetEntity = User.class, mappedBy = "likedPosts")
     private Set<User> studentsWhoLiked;
 
     @OneToMany(mappedBy = "post")
@@ -93,4 +93,6 @@ public class Post {
     public Set<PostComment> getComments() {
         return comments;
     }
+
+    public Set<User> getStudentsWhoLiked() { return studentsWhoLiked; }
 }
