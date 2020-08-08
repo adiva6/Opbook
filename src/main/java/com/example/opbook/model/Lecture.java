@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 
 @Entity
 @Table(name = "Lecture")
@@ -21,9 +22,9 @@ public class Lecture {
     @NotEmpty(message = "{validation.link.notEmpty}")
     private String link;
 
-    @Column(name = "Order")
-    @NotEmpty(message = "{validation.order.notEmpty}")
-    private Integer order;
+    @Column(name = "CreationTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationTime;
 
     @JsonIgnore
     @ManyToOne
@@ -54,13 +55,9 @@ public class Lecture {
         this.link = link;
     }
 
-    public Integer getOrder() {
-        return order;
-    }
+    public Date getCreationTime() { return creationTime; }
 
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
+    public void setCreationTime(Date creationTime) { this.creationTime = creationTime; }
 
     public Course getCourse() {
         return course;

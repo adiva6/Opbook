@@ -1,10 +1,7 @@
 package com.example.opbook.controller;
 
 import com.example.opbook.exceptions.CourseNotFoundException;
-import com.example.opbook.model.Course;
-import com.example.opbook.model.Post;
-import com.example.opbook.model.PostComment;
-import com.example.opbook.model.User;
+import com.example.opbook.model.*;
 import com.example.opbook.service.CourseService;
 import com.example.opbook.service.PostService;
 import com.example.opbook.service.UserService;
@@ -40,6 +37,13 @@ public class CourseController extends BaseController {
     public ResponseEntity<Course> getCourse(@PathVariable(value = "courseSymbol") String courseSymbol) {
         Course course = findCourseBySymbol(courseSymbol);
         return ResponseEntity.ok(course);
+    }
+
+    @GetMapping(value = "/courses/{courseSymbol}/lectures")
+    public ResponseEntity<Iterable<Lecture>> getCourseLectures(
+            @PathVariable(value = "courseSymbol") String courseSymbol) {
+        Course course = findCourseBySymbol(courseSymbol);
+        return ResponseEntity.ok(course.getLectures());
     }
 
     @PostMapping(value = "/courses/{courseSymbol}/posts")
