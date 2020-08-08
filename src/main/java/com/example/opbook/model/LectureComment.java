@@ -1,20 +1,31 @@
 package com.example.opbook.model;
 
+import com.example.opbook.serde.LectureCommentJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
+@JsonDeserialize(using = LectureCommentJsonDeserializer.class)
 @Entity
 @Table(name = "LectureComment")
 public class LectureComment {
+    public LectureComment() {
+
+    }
+
+    public LectureComment(String content) {
+        this.content = content;
+        this.creationTime = new Date();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Integer id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
@@ -24,9 +35,12 @@ public class LectureComment {
     @JoinColumn(name = "LectureID", nullable = false)
     private Lecture lecture;
 
-    @Column(name = "ReferenceTime")
+    @Column(name = "CreationTime")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date referenceTime;
+    private Date creationTime;
+
+    @Column(name = "ReferenceTimeSeconds")
+    private Integer referenceTimeSeconds;
 
     @Column(name = "Content")
     @NotEmpty(message = "{validation.content.notEmpty}")
@@ -56,13 +70,15 @@ public class LectureComment {
         this.lecture = lecture;
     }
 
-    public Date getReferenceTime() {
-        return referenceTime;
+    public Integer getReferenceTimeSeconds() {
+        return referenceTimeSeconds;
     }
 
-    public void setReferenceTime(Date referenceTime) {
-        this.referenceTime = referenceTime;
+    public void setReferenceTimeSeconds(Integer referenceTimeSeconds) {
+        this.referenceTimeSeconds = referenceTimeSeconds;
     }
+
+    public Date getCreationTime() { return creationTime; }
 
     public String getContent() {
         return content;

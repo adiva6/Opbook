@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @RestController
 public class CourseController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     @Autowired
     private CourseService courseService;

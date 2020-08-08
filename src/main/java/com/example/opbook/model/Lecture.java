@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Lecture")
@@ -12,7 +13,7 @@ public class Lecture {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "Name")
     @NotEmpty(message = "{validation.name.notEmpty}")
@@ -31,11 +32,14 @@ public class Lecture {
     @JoinColumn(name = "CourseID", nullable = false)
     private Course course;
 
-    public Integer getId() {
+    @OneToMany(mappedBy = "lecture")
+    private Set<LectureComment> comments;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,4 +70,6 @@ public class Lecture {
     public void setCourse(Course course) {
         this.course = course;
     }
+
+    public Set<LectureComment> getComments() { return comments; }
 }

@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @RestController
 public class PostController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
     @Autowired
     private PostService postService;
