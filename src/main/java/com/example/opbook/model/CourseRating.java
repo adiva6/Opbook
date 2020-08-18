@@ -11,7 +11,7 @@ public class CourseRating {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne
@@ -35,11 +35,11 @@ public class CourseRating {
     @JoinColumn(name = "CourseID", nullable = false)
     private Course course;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
