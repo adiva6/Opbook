@@ -1,13 +1,26 @@
 package com.example.opbook.model;
 
+import com.example.opbook.serde.CourseRatingJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+@JsonDeserialize(using = CourseRatingJsonDeserializer.class)
 @Entity
 @Table(name = "CourseRating")
 public class CourseRating {
+    public CourseRating() {
+
+    }
+
+    public CourseRating(Integer interest, Integer instruction, Integer relevance) {
+        this.instruction = instruction;
+        this.interest = interest;
+        this.relevance = relevance;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
