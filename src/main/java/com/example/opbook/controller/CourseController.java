@@ -61,6 +61,14 @@ public class CourseController extends BaseController {
         return ResponseEntity.ok(post);
     }
 
+    @PostMapping(value = "/courses/{courseSymbol}/ratings")
+    public ResponseEntity<CourseRating> submitCourseRating(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                                           @Valid @RequestBody CourseRating courseRating,
+                                                           Principal principal) {
+        // TODO: Check if rating exists per user and course and complete this method
+        return null;
+    }
+
     @GetMapping(value = "/courses/{courseSymbol}/posts")
     public ResponseEntity<Iterable<Post>> getCoursePosts(@PathVariable(value = "courseSymbol") String courseSymbol) {
         Course course = findCourseBySymbol(courseSymbol);
