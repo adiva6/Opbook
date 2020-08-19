@@ -1,15 +1,28 @@
 package com.example.opbook.model;
 
+import com.example.opbook.parser.LectureJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.Set;
 
+@JsonDeserialize(using = LectureJsonDeserializer.class)
 @Entity
 @Table(name = "Lecture")
 public class Lecture {
+    public Lecture() {
+
+    }
+
+    public Lecture(String name, String videoId) {
+        this.name = name;
+        this.videoId = videoId;
+        this.creationTime = new Date();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -19,9 +32,9 @@ public class Lecture {
     @NotEmpty(message = "{validation.name.notEmpty}")
     private String name;
 
-    @Column(name = "Link")
-    @NotEmpty(message = "{validation.link.notEmpty}")
-    private String link;
+    @Column(name = "VideoID")
+    @NotEmpty(message = "{validation.videoId.notEmpty}")
+    private String videoId;
 
     @Column(name = "CreationTime")
     @Temporal(TemporalType.TIMESTAMP)
@@ -51,12 +64,12 @@ public class Lecture {
         this.name = name;
     }
 
-    public String getLink() {
-        return link;
+    public String getVideoId() {
+        return videoId;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
     }
 
     public Date getCreationTime() { return creationTime; }

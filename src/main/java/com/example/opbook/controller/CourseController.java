@@ -2,11 +2,9 @@ package com.example.opbook.controller;
 
 import com.example.opbook.exceptions.AlreadyRatedException;
 import com.example.opbook.exceptions.CourseNotFoundException;
+import com.example.opbook.exceptions.ForbiddenException;
 import com.example.opbook.model.*;
-import com.example.opbook.service.CourseRatingService;
-import com.example.opbook.service.CourseService;
-import com.example.opbook.service.PostService;
-import com.example.opbook.service.UserService;
+import com.example.opbook.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,9 @@ public class CourseController extends BaseController {
 
     @Autowired
     private CourseRatingService courseRatingService;
+
+    @Autowired
+    private LectureService lectureService;
 
     @GetMapping(value = "/courses")
     public Iterable<Course> getAllCourses() {
@@ -92,6 +93,25 @@ public class CourseController extends BaseController {
     public ResponseEntity<Iterable<Post>> getCoursePosts(@PathVariable(value = "courseSymbol") String courseSymbol) {
         Course course = findCourseBySymbol(courseSymbol);
         return ResponseEntity.ok(course.getPosts());
+    }
+
+    @PostMapping(value = "/courses/{courseSymbol}/lectures")
+    public ResponseEntity<Lecture> uploadLecture(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                                 @Valid @RequestBody Lecture lecture,
+                                                 Principal principal) {
+        Course course = findCourseBySymbol(courseSymbol);
+        User submitter = userService.findByEmail(principal.getName());
+
+        if (!submitter.getIsAdmin()) {
+            String errorMessage = "Non admin user cannot upload lecture";
+            logger.error(errorMessage);
+            throw new ForbiddenException(errorMessage);
+        }
+
+        lecture.setCourse(course);
+        lectureService.save(lecture);
+        logger.info("Lecture was uploaded successfully");
+        return ResponseEntity.ok(lecture);
     }
 
     private Course findCourseBySymbol(String courseSymbol) {
