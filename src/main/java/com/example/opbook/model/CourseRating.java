@@ -1,11 +1,13 @@
 package com.example.opbook.model;
 
-import com.example.opbook.serde.CourseRatingJsonDeserializer;
+import com.example.opbook.parser.CourseRatingJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @JsonDeserialize(using = CourseRatingJsonDeserializer.class)
 @Entity
@@ -26,21 +28,26 @@ public class CourseRating {
     @Column(name = "ID")
     private Long id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "Interest")
-    @NotEmpty(message = "{validation.interest.notEmpty}")
+    @NotNull(message = "{validation.interest.notNull}")
     private Integer interest;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "Instruction")
-    @NotEmpty(message = "{validation.instruction.notEmpty}")
+    @NotNull(message = "{validation.instruction.notNull}")
     private Integer instruction;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "Relevance")
-    @NotEmpty(message = "{validation.relevance.notEmpty}")
+    @NotNull(message = "{validation.relevance.notNull}")
     private Integer relevance;
 
     @JsonIgnore

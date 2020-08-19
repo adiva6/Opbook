@@ -1,6 +1,6 @@
 package com.example.opbook.model;
 
-import com.example.opbook.serde.PostCommentJsonDeserializer;
+import com.example.opbook.parser.PostCommentJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

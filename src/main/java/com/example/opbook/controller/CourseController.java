@@ -1,7 +1,9 @@
 package com.example.opbook.controller;
 
+import com.example.opbook.exceptions.AlreadyRatedException;
 import com.example.opbook.exceptions.CourseNotFoundException;
 import com.example.opbook.model.*;
+import com.example.opbook.service.CourseRatingService;
 import com.example.opbook.service.CourseService;
 import com.example.opbook.service.PostService;
 import com.example.opbook.service.UserService;
@@ -27,6 +29,9 @@ public class CourseController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CourseRatingService courseRatingService;
 
     @GetMapping(value = "/courses")
     public Iterable<Course> getAllCourses() {
@@ -65,8 +70,22 @@ public class CourseController extends BaseController {
     public ResponseEntity<CourseRating> submitCourseRating(@PathVariable(value = "courseSymbol") String courseSymbol,
                                                            @Valid @RequestBody CourseRating courseRating,
                                                            Principal principal) {
-        // TODO: Check if rating exists per user and course and complete this method
-        return null;
+        Course course = findCourseBySymbol(courseSymbol);
+        User submitter = userService.findByEmail(principal.getName());
+        CourseRating existingCourseRating = courseRatingService.findByCourseAndUser(course, submitter);
+
+        if (existingCourseRating != null) {
+            String errorMessage = String.format("User %s already rated course %s!",
+                    submitter.getName(), course.getCourseSymbol());
+            logger.error(errorMessage);
+            throw new AlreadyRatedException(errorMessage);
+        }
+
+        courseRating.setCourse(course);
+        courseRating.setUser(submitter);
+        this.courseRatingService.save(courseRating);
+        logger.info("Course rating was successfully submitted");
+        return ResponseEntity.ok(courseRating);
     }
 
     @GetMapping(value = "/courses/{courseSymbol}/posts")

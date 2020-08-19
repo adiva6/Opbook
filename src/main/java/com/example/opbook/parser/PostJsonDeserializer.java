@@ -1,6 +1,6 @@
-package com.example.opbook.serde;
+package com.example.opbook.parser;
 
-import com.example.opbook.model.PostComment;
+import com.example.opbook.model.Post;
 import com.example.opbook.service.PostService;
 import com.example.opbook.service.UserService;
 import com.fasterxml.jackson.core.JsonParser;
@@ -14,9 +14,8 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-
 @JsonComponent
-public class PostCommentJsonDeserializer extends JsonDeserializer<PostComment> {
+public class PostJsonDeserializer extends JsonDeserializer<Post> {
     @Autowired
     private UserService userService;
 
@@ -24,13 +23,12 @@ public class PostCommentJsonDeserializer extends JsonDeserializer<PostComment> {
     private PostService postService;
 
     @Override
-    public PostComment deserialize(JsonParser jsonParser,
-                                   DeserializationContext deserializationContext) throws IOException,
-            JsonProcessingException {
-
+    public Post deserialize(JsonParser jsonParser,
+                            DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         TreeNode treeNode = jsonParser.getCodec().readTree(jsonParser);
 
+        TextNode title = (TextNode) treeNode.get("title");
         TextNode content = (TextNode) treeNode.get("content");
-        return new PostComment(content.asText());
+        return new Post(title.asText(), content.asText());
     }
 }

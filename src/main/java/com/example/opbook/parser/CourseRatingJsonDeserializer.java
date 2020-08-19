@@ -1,4 +1,4 @@
-package com.example.opbook.serde;
+package com.example.opbook.parser;
 
 import com.example.opbook.model.CourseRating;
 import com.example.opbook.service.CourseService;

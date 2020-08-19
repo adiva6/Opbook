@@ -40,6 +40,9 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Lecture> lectures;
 
+    @OneToMany(mappedBy = "course")
+    private Set<CourseRating> ratings;
+
     public Long getId() {
         return id;
     }
@@ -87,5 +90,7 @@ public class Course {
     public Set<User> getStudents() { return students; }
 
     public Set<Lecture> getLectures() { return lectures; }
+
+    public Set<CourseRating> getRatings() { return ratings; }
 
 }
