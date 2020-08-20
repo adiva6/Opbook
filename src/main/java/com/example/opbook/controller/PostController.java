@@ -3,10 +3,8 @@ package com.example.opbook.controller;
 import com.example.opbook.exceptions.LikeAlreadyExistsException;
 import com.example.opbook.exceptions.LikeNotFoundException;
 import com.example.opbook.exceptions.PostNotFoundException;
-import com.example.opbook.model.Post;
-import com.example.opbook.model.PostComment;
-import com.example.opbook.model.PostLike;
-import com.example.opbook.model.User;
+import com.example.opbook.model.*;
+import com.example.opbook.restutils.CourseUtils;
 import com.example.opbook.service.PostCommentService;
 import com.example.opbook.service.PostLikeService;
 import com.example.opbook.service.PostService;
@@ -36,6 +34,24 @@ public class PostController extends BaseController {
 
     @Autowired
     private PostLikeService postLikeService;
+
+    @Autowired
+    private CourseUtils courseUtils;
+
+    @PostMapping(value = "/courses/{courseSymbol}/posts")
+    public ResponseEntity<Post> submitPost(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                           @Valid @RequestBody Post post,
+                                           Principal principal) {
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
+        User submitter = userService.findByEmail(principal.getName());
+
+        post.setSubmitter(submitter);
+        post.setCourse(course);
+
+        this.postService.save(post);
+        logger.info("Post was successfully submitted");
+        return ResponseEntity.ok(post);
+    }
 
     @GetMapping(value = "/posts/{postId}/comments")
     public ResponseEntity<Iterable<PostComment>> getPostComments(@PathVariable(value = "postId") long postId) {
@@ -99,6 +115,12 @@ public class PostController extends BaseController {
         postLikeService.delete(postLike.get());
         logger.info("Like was successfully deleted");
         return ResponseEntity.ok(submitter);
+    }
+
+    @GetMapping(value = "/courses/{courseSymbol}/posts")
+    public ResponseEntity<Iterable<Post>> getCoursePosts(@PathVariable(value = "courseSymbol") String courseSymbol) {
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
+        return ResponseEntity.ok(course.getPosts());
     }
 
     private Post findPostById(long postId) {

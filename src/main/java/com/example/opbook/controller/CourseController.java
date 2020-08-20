@@ -1,9 +1,8 @@
 package com.example.opbook.controller;
 
-import com.example.opbook.exceptions.AlreadyRatedException;
-import com.example.opbook.exceptions.CourseNotFoundException;
-import com.example.opbook.exceptions.ForbiddenException;
+import com.example.opbook.exceptions.*;
 import com.example.opbook.model.*;
+import com.example.opbook.restutils.CourseUtils;
 import com.example.opbook.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 
 @RestController
@@ -23,16 +23,16 @@ public class CourseController extends BaseController {
     private CourseService courseService;
 
     @Autowired
-    private PostService postService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private CourseRatingService courseRatingService;
 
     @Autowired
-    private LectureService lectureService;
+    private CourseUtils courseUtils;
+
+    @Autowired
+    private UserCourseService userCourseService;
 
     @GetMapping(value = "/courses")
     public Iterable<Course> getAllCourses() {
@@ -41,37 +41,15 @@ public class CourseController extends BaseController {
 
     @GetMapping(value = "/courses/{courseSymbol}")
     public ResponseEntity<Course> getCourse(@PathVariable(value = "courseSymbol") String courseSymbol) {
-        Course course = findCourseBySymbol(courseSymbol);
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
         return ResponseEntity.ok(course);
-    }
-
-    @GetMapping(value = "/courses/{courseSymbol}/lectures")
-    public ResponseEntity<Iterable<Lecture>> getCourseLectures(
-            @PathVariable(value = "courseSymbol") String courseSymbol) {
-        Course course = findCourseBySymbol(courseSymbol);
-        return ResponseEntity.ok(course.getLectures());
-    }
-
-    @PostMapping(value = "/courses/{courseSymbol}/posts")
-    public ResponseEntity<Post> submitPost(@PathVariable(value = "courseSymbol") String courseSymbol,
-                                           @Valid @RequestBody Post post,
-                                           Principal principal) {
-        Course course = findCourseBySymbol(courseSymbol);
-        User submitter = userService.findByEmail(principal.getName());
-
-        post.setSubmitter(submitter);
-        post.setCourse(course);
-
-        this.postService.save(post);
-        logger.info("Post was successfully submitted");
-        return ResponseEntity.ok(post);
     }
 
     @PostMapping(value = "/courses/{courseSymbol}/ratings")
     public ResponseEntity<CourseRating> submitCourseRating(@PathVariable(value = "courseSymbol") String courseSymbol,
                                                            @Valid @RequestBody CourseRating courseRating,
                                                            Principal principal) {
-        Course course = findCourseBySymbol(courseSymbol);
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
         User submitter = userService.findByEmail(principal.getName());
         CourseRating existingCourseRating = courseRatingService.findByCourseAndUser(course, submitter);
 
@@ -89,39 +67,43 @@ public class CourseController extends BaseController {
         return ResponseEntity.ok(courseRating);
     }
 
-    @GetMapping(value = "/courses/{courseSymbol}/posts")
-    public ResponseEntity<Iterable<Post>> getCoursePosts(@PathVariable(value = "courseSymbol") String courseSymbol) {
-        Course course = findCourseBySymbol(courseSymbol);
-        return ResponseEntity.ok(course.getPosts());
-    }
+    @PostMapping(value = "/courses/{courseSymbol}/students")
+    public ResponseEntity<User> joinCourse(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                           Principal principal) {
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
+        User student = userService.findByEmail(principal.getName());
 
-    @PostMapping(value = "/courses/{courseSymbol}/lectures")
-    public ResponseEntity<Lecture> uploadLecture(@PathVariable(value = "courseSymbol") String courseSymbol,
-                                                 @Valid @RequestBody Lecture lecture,
-                                                 Principal principal) {
-        Course course = findCourseBySymbol(courseSymbol);
-        User submitter = userService.findByEmail(principal.getName());
-
-        if (!submitter.getIsAdmin()) {
-            String errorMessage = "Non admin user cannot upload lecture";
+        Optional<UserCourse> userCourse = userCourseService.findById(student.getId(), course.getId());
+        if (userCourse.isPresent()) {
+            String errorMessage = String.format("User #%d is already enrolled to course %s!",
+                    student.getId(), courseSymbol);
             logger.error(errorMessage);
-            throw new ForbiddenException(errorMessage);
+            throw new UserAlreadyEnrolledException(errorMessage);
         }
 
-        lecture.setCourse(course);
-        lectureService.save(lecture);
-        logger.info("Lecture was uploaded successfully");
-        return ResponseEntity.ok(lecture);
+        UserCourse newUserCourse = new UserCourse(student, course);
+        userCourseService.save(newUserCourse);
+        logger.info("User was successfully enrolled");
+        return ResponseEntity.ok(student);
     }
 
-    private Course findCourseBySymbol(String courseSymbol) {
-        Course course = courseService.findByCourseSymbol(courseSymbol);
-        if (course == null) {
-            String errorMessage = String.format("Course (%s) wasn't found!", courseSymbol);
+    @DeleteMapping(value = "/courses/{courseSymbol}/students")
+    public ResponseEntity<User> leaveCourse(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                            Principal principal) {
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
+        User student = userService.findByEmail(principal.getName());
+
+        Optional<UserCourse> userCourse = userCourseService.findById(student.getId(), course.getId());
+        if (!userCourse.isPresent()) {
+            String errorMessage = String.format("User #%d isn't enrolled to course %s!",
+                    student.getId(), courseSymbol);
             logger.error(errorMessage);
-            throw new CourseNotFoundException(errorMessage);
+            throw new UserCourseNotFoundException(errorMessage);
         }
 
-        return course;
+        userCourseService.delete(userCourse.get());
+        logger.info("User was successfully removed from course");
+        return ResponseEntity.ok(student);
     }
+
 }

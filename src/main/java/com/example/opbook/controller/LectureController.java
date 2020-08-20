@@ -1,18 +1,18 @@
 package com.example.opbook.controller;
 
+import com.example.opbook.exceptions.ForbiddenException;
 import com.example.opbook.exceptions.LectureNotFoundException;
+import com.example.opbook.model.Course;
 import com.example.opbook.model.Lecture;
 import com.example.opbook.model.LectureComment;
 import com.example.opbook.model.User;
+import com.example.opbook.restutils.CourseUtils;
 import com.example.opbook.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -31,6 +31,16 @@ public class LectureController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CourseUtils courseUtils;
+
+    @GetMapping(value = "/courses/{courseSymbol}/lectures")
+    public ResponseEntity<Iterable<Lecture>> getCourseLectures(
+            @PathVariable(value = "courseSymbol") String courseSymbol) {
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
+        return ResponseEntity.ok(course.getLectures());
+    }
+
     @PostMapping(value = "/lectures/{lectureId}/comments")
     public ResponseEntity<LectureComment> submitLectureComment(@PathVariable(value = "lectureId") long lectureId,
                                                                @Valid @RequestBody LectureComment lectureComment,
@@ -44,6 +54,25 @@ public class LectureController extends BaseController {
         lectureCommentService.save(lectureComment);
         logger.info("Comment was successfully submitted");
         return ResponseEntity.ok(lectureComment);
+    }
+
+    @PostMapping(value = "/courses/{courseSymbol}/lectures")
+    public ResponseEntity<Lecture> uploadLecture(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                                 @Valid @RequestBody Lecture lecture,
+                                                 Principal principal) {
+        Course course = courseUtils.findCourseBySymbol(courseSymbol);
+        User submitter = userService.findByEmail(principal.getName());
+
+        if (!submitter.getIsAdmin()) {
+            String errorMessage = "Non admin user cannot upload lecture";
+            logger.error(errorMessage);
+            throw new ForbiddenException(errorMessage);
+        }
+
+        lecture.setCourse(course);
+        lectureService.save(lecture);
+        logger.info("Lecture was uploaded successfully");
+        return ResponseEntity.ok(lecture);
     }
 
     private Lecture findLectureById(long lectureId) {
