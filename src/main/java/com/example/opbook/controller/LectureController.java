@@ -42,8 +42,10 @@ public class LectureController extends BaseController {
         return ResponseEntity.ok(course.getLectures());
     }
 
-    @PostMapping(value = "/lectures/{lectureId}/comments")
-    public ResponseEntity<LectureComment> submitLectureComment(@PathVariable(value = "lectureId") long lectureId,
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
+    @PostMapping(value = "/courses/{courseSymbol}/lectures/{lectureId}/comments")
+    public ResponseEntity<LectureComment> submitLectureComment(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                                               @PathVariable(value = "lectureId") long lectureId,
                                                                @Valid @RequestBody LectureComment lectureComment,
                                                                Principal principal) {
         Lecture lecture = findLectureById(lectureId);

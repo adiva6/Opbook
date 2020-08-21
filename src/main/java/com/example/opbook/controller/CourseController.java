@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,6 +46,7 @@ public class CourseController extends BaseController {
         return ResponseEntity.ok(course);
     }
 
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
     @PostMapping(value = "/courses/{courseSymbol}/ratings")
     public ResponseEntity<CourseRating> submitCourseRating(@PathVariable(value = "courseSymbol") String courseSymbol,
                                                            @Valid @RequestBody CourseRating courseRating,

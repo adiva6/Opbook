@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,6 +39,7 @@ public class PostController extends BaseController {
     @Autowired
     private CourseUtils courseUtils;
 
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
     @PostMapping(value = "/courses/{courseSymbol}/posts")
     public ResponseEntity<Post> submitPost(@PathVariable(value = "courseSymbol") String courseSymbol,
                                            @Valid @RequestBody Post post,
@@ -53,20 +55,10 @@ public class PostController extends BaseController {
         return ResponseEntity.ok(post);
     }
 
-    @GetMapping(value = "/posts/{postId}/comments")
-    public ResponseEntity<Iterable<PostComment>> getPostComments(@PathVariable(value = "postId") long postId) {
-        Optional<Post> post = postService.findById(postId);
-        if (!post.isPresent()) {
-            String errorMessage = String.format("Post #%d wasn't found!", postId);
-            logger.error(errorMessage);
-            throw new PostNotFoundException(errorMessage);
-        }
-
-        return ResponseEntity.ok(post.get().getComments());
-    }
-
-    @PostMapping(value = "/posts/{postId}/comments")
-    public ResponseEntity<PostComment> submitPostComment(@PathVariable(value = "postId") long postId,
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
+    @PostMapping(value = "/courses/{courseSymbol}/posts/{postId}/comments")
+    public ResponseEntity<PostComment> submitPostComment(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                                         @PathVariable(value = "postId") long postId,
                                                          @Valid @RequestBody PostComment postComment,
                                                          Principal principal) {
         Post post = findPostById(postId);
@@ -80,8 +72,10 @@ public class PostController extends BaseController {
         return ResponseEntity.ok(postComment);
     }
 
-    @PostMapping(value = "/posts/{postId}/likes")
-    public ResponseEntity<User> submitPostLike(@PathVariable(value = "postId") long postId,
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
+    @PostMapping(value = "/courses/{courseSymbol}/posts/{postId}/likes")
+    public ResponseEntity<User> submitPostLike(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                               @PathVariable(value = "postId") long postId,
                                                Principal principal) {
         Post post = findPostById(postId);
         User submitter = userService.findByEmail(principal.getName());
@@ -99,8 +93,10 @@ public class PostController extends BaseController {
         return ResponseEntity.ok(submitter);
     }
 
-    @DeleteMapping(value = "/posts/{postId}/likes")
-    public ResponseEntity<User> deletePostLike(@PathVariable(value = "postId") long postId,
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
+    @DeleteMapping(value = "/courses/{courseSymbol}/posts/{postId}/likes")
+    public ResponseEntity<User> deletePostLike(@PathVariable(value = "courseSymbol") String courseSymbol,
+                                               @PathVariable(value = "postId") long postId,
                                                Principal principal) {
         Post post = findPostById(postId);
         User submitter = userService.findByEmail(principal.getName());
@@ -117,6 +113,7 @@ public class PostController extends BaseController {
         return ResponseEntity.ok(submitter);
     }
 
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
     @GetMapping(value = "/courses/{courseSymbol}/posts")
     public ResponseEntity<Iterable<Post>> getCoursePosts(@PathVariable(value = "courseSymbol") String courseSymbol) {
         Course course = courseUtils.findCourseBySymbol(courseSymbol);

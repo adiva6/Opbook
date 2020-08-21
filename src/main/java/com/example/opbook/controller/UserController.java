@@ -24,11 +24,6 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/students")
-    public Iterable<User> getAllUsers() {
-        return userService.findAll();
-    }
-
     @GetMapping(value = "/user")
     public ResponseEntity<User> getUser(Principal principal) {
         return ResponseEntity.ok(userService.findByEmail(principal.getName()));
