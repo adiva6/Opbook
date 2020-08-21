@@ -1,6 +1,5 @@
 package com.example.opbook.controller;
 
-import com.example.opbook.exceptions.ForbiddenException;
 import com.example.opbook.exceptions.LectureNotFoundException;
 import com.example.opbook.model.Course;
 import com.example.opbook.model.Lecture;
@@ -12,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,18 +56,11 @@ public class LectureController extends BaseController {
         return ResponseEntity.ok(lectureComment);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "/courses/{courseSymbol}/lectures")
     public ResponseEntity<Lecture> uploadLecture(@PathVariable(value = "courseSymbol") String courseSymbol,
-                                                 @Valid @RequestBody Lecture lecture,
-                                                 Principal principal) {
+                                                 @Valid @RequestBody Lecture lecture) {
         Course course = courseUtils.findCourseBySymbol(courseSymbol);
-        User submitter = userService.findByEmail(principal.getName());
-
-        if (!submitter.getIsAdmin()) {
-            String errorMessage = "Non admin user cannot upload lecture";
-            logger.error(errorMessage);
-            throw new ForbiddenException(errorMessage);
-        }
 
         lecture.setCourse(course);
         lectureService.save(lecture);
