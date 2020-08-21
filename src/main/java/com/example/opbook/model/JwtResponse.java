@@ -1,6 +1,5 @@
 package com.example.opbook.model;
 
-
 import java.io.Serializable;
 
 public class JwtResponse implements Serializable {

@@ -5,7 +5,6 @@ import com.example.opbook.repository.PostCommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service("postCommentService")
 public class PostCommentService {
     private PostCommentRepository postCommentRepository;

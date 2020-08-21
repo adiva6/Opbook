@@ -3,7 +3,6 @@ package com.example.opbook.config;
 import com.example.opbook.model.Course;
 import com.example.opbook.model.User;
 import com.example.opbook.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;

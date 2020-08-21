@@ -1,7 +1,6 @@
 package com.example.opbook.controller;
 
 import com.example.opbook.exceptions.ConflictException;
-import com.example.opbook.exceptions.CourseNotFoundException;
 import com.example.opbook.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;

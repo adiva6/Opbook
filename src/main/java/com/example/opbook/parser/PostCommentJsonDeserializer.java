@@ -14,7 +14,6 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-
 @JsonComponent
 public class PostCommentJsonDeserializer extends JsonDeserializer<PostComment> {
     @Autowired

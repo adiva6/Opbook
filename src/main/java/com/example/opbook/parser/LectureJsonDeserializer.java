@@ -1,7 +1,6 @@
 package com.example.opbook.parser;
 
 import com.example.opbook.model.Lecture;
-import com.example.opbook.model.PostComment;
 import com.example.opbook.service.CourseService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

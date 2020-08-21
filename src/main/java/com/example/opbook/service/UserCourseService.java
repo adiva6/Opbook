@@ -1,7 +1,5 @@
 package com.example.opbook.service;
 
-import com.example.opbook.model.PostLike;
-import com.example.opbook.model.PostLikeId;
 import com.example.opbook.model.UserCourse;
 import com.example.opbook.model.UserCourseId;
 import com.example.opbook.repository.UserCourseRepository;
