@@ -2,15 +2,20 @@ package com.example.opbook.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
 @Table(name = "User")
 public class User {
+    private static final String ADMIN_ROLE_NAME = "ROLE_ADMIN";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -92,4 +97,14 @@ public class User {
         return attendedCourses;
     }
 
+    @JsonIgnore
+    public ArrayList<GrantedAuthority> getAuthorities() {
+        ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+        if (this.getIsAdmin()) {
+            authorities.add(new SimpleGrantedAuthority(ADMIN_ROLE_NAME));
+        }
+
+        return authorities;
+    }
 }

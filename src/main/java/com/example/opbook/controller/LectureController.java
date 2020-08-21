@@ -34,6 +34,7 @@ public class LectureController extends BaseController {
     @Autowired
     private CourseUtils courseUtils;
 
+    @PreAuthorize("isEnrolledStudent(#courseSymbol)")
     @GetMapping(value = "/courses/{courseSymbol}/lectures")
     public ResponseEntity<Iterable<Lecture>> getCourseLectures(
             @PathVariable(value = "courseSymbol") String courseSymbol) {

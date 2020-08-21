@@ -15,8 +15,6 @@ import java.util.ArrayList;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-    private static final String ADMIN_ROLE_NAME = "ROLE_ADMIN";
-
     @Autowired
     private UserService userService;
 
@@ -27,14 +25,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.findByEmail(email);
         if (user != null) {
-            ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-
-            if (user.getIsAdmin()) {
-                authorities.add(new SimpleGrantedAuthority(ADMIN_ROLE_NAME));
-            }
-
             return new org.springframework.security.core.userdetails.User(email,
-                    bCryptPasswordEncoder.encode(user.getPassword()), authorities);
+                    bCryptPasswordEncoder.encode(user.getPassword()), user.getAuthorities());
         } else {
             throw new UsernameNotFoundException("User not found.");
         }
