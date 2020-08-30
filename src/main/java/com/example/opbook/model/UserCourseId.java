@@ -6,22 +6,22 @@ import java.util.Objects;
 
 @Embeddable
 public class UserCourseId implements Serializable {
-    private Integer userId;
+    private Long userId;
 
-    private Integer courseId;
+    private Long courseId;
 
     public UserCourseId() {
 
     }
 
     public UserCourseId(Long userId, Long courseId) {
-        this.userId = userId.intValue();
-        this.courseId = courseId.intValue();
+        this.userId = userId;
+        this.courseId = courseId;
     }
 
-    public Integer getUserId() { return this.userId; }
+    public Long getUserId() { return this.userId; }
 
-    public Integer getCourseId() { return this.courseId; }
+    public Long getCourseId() { return this.courseId; }
 
     @Override
     public int hashCode() {

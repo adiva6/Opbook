@@ -6,24 +6,24 @@ import java.util.Objects;
 
 @Embeddable
 public class PostLikeId implements Serializable {
-    private Integer userId;
+    private Long userId;
 
-    private Integer postId;
+    private Long postId;
 
     public PostLikeId() {
 
     }
 
     public PostLikeId(Long userId, Long postId) {
-        this.userId = userId.intValue();
-        this.postId = postId.intValue();
+        this.userId = userId;
+        this.postId = postId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public Integer getPostId() {
+    public Long getPostId() {
         return postId;
     }
 

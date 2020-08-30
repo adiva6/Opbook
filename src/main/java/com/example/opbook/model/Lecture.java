@@ -1,6 +1,7 @@
 package com.example.opbook.model;
 
 import com.example.opbook.parser.LectureJsonDeserializer;
+import com.example.opbook.validator.VideoConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -32,6 +33,7 @@ public class Lecture {
     @NotEmpty(message = "{validation.name.notEmpty}")
     private String name;
 
+    @VideoConstraint
     @Column(name = "VideoID")
     @NotEmpty(message = "{validation.videoId.notEmpty}")
     private String videoId;

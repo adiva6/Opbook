@@ -1,5 +1,6 @@
 package com.example.opbook.model;
 
+import com.example.opbook.validator.EmailConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +26,7 @@ public class User {
     @NotEmpty(message = "{validation.name.notEmpty}")
     private String name;
 
+    @EmailConstraint
     @Column(name = "Email")
     @Email(message = "{validation.email.valid")
     @NotEmpty(message = "{validation.email.notEmpty}")
